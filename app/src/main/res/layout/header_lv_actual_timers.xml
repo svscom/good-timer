@@ -63,4 +63,12 @@
         android:ems="10"
         android:id="@+id/editTextDescription"
         android:hint="@string/editTextDescriptionText" />
+
+    <Switch
+        android:text="@string/switchAddInActualTimersText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchAddInActualTimers"
+        android:textOn="@string/switchAddInActualTimersTextOn"
+        android:textOff="@string/switchAddInActualTimersTextOff" />
 </LinearLayout>
