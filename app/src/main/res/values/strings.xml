@@ -8,4 +8,5 @@
     <string name="switchAddInActualTimersTextOn">Да</string>
     <string name="switchAddInActualTimersTextOff">Нет</string>
     <string name="buttonStartTimerText">Запустить таймер</string>
+    <string name="textViewHeaderOfListActualTimersText">Актуальные</string>
 </resources>
