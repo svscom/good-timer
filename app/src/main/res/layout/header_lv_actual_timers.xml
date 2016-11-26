@@ -71,4 +71,10 @@
         android:id="@+id/switchAddInActualTimers"
         android:textOn="@string/switchAddInActualTimersTextOn"
         android:textOff="@string/switchAddInActualTimersTextOff" />
+
+    <Button
+        android:text="@string/buttonStartTimerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonStartTimer" />
 </LinearLayout>
