@@ -7,4 +7,5 @@
     <string name="switchAddInActualTimersText">Добавить в список актульных</string>
     <string name="switchAddInActualTimersTextOn">Да</string>
     <string name="switchAddInActualTimersTextOff">Нет</string>
+    <string name="buttonStartTimerText">Запустить таймер</string>
 </resources>
