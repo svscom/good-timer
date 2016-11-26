@@ -3,4 +3,5 @@
     <string name="textViewHoursText">Часы</string>
     <string name="textViewMinutesText">Минуты</string>
     <string name="textViewSecondsText">Секунды</string>
+    <string name="editTextDescriptionText">Описание</string>
 </resources>

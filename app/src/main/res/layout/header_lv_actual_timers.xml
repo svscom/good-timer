@@ -55,4 +55,12 @@
             android:id="@+id/numberPickerSeconds"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:ems="10"
+        android:id="@+id/editTextDescription"
+        android:hint="@string/editTextDescriptionText" />
 </LinearLayout>
