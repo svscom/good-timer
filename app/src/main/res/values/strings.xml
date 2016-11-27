@@ -9,4 +9,6 @@
     <string name="switchAddInActualTimersTextOff">Нет</string>
     <string name="buttonStartTimerText">Запустить таймер</string>
     <string name="textViewHeaderOfListActualTimersText">Актуальные</string>
+    <string name="imageViewItemListActualTimersContentDescription">Изображение таймера для элемента списка</string>
+    <string name="textViewListActualTimersTimerValueDefaultText">Значение</string>
 </resources>
