@@ -8,10 +8,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/imageView"
         android:contentDescription="@string/imageViewItemListActualTimersContentDescription"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher" />
 
     <View
         android:layout_width="3dp"
