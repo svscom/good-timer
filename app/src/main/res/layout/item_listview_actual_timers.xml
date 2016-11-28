@@ -28,18 +28,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewListActualTimersTimerDescription"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@drawable/divider_horizontal_item_list_actual_timers" />
+            android:background="@drawable/divider_horizontal_item_list_actual_timers"
+            android:id="@+id/viewListActualTimersHorizontalDivider" />
 
         <TextView
             android:text="@string/textViewListActualTimersTimerValueDefaultText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewListActualTimersTimerValue"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>
