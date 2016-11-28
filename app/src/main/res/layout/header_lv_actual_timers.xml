@@ -15,21 +15,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewHours"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary" />
 
         <TextView
             android:text="@string/textViewMinutesText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewMinutes"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp"
+            android:gravity="center" />
 
         <TextView
             android:text="@string/textViewSecondsText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSeconds"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="?android:attr/textColorPrimary" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text|textMultiLine"
-        android:ems="10"
         android:id="@+id/editTextDescription"
         android:hint="@string/editTextDescriptionText" />
 
@@ -76,7 +84,9 @@
         android:text="@string/buttonStartTimerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonStartTimer" />
+        android:id="@+id/buttonStartTimer"
+        android:textSize="18sp"
+        style="?attr/buttonStyle" />
 
     <View
         android:layout_width="wrap_content"
@@ -87,10 +97,14 @@
         android:text="@string/textViewHeaderOfListActualTimersText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewHeaderOfListActualTimers" />
+        android:id="@+id/textViewHeaderOfListActualTimers"
+        android:gravity="center"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="18sp"
+        android:paddingTop="10dp" />
 
     <View
         android:layout_width="wrap_content"
         android:background="@drawable/divider_for_headers"
-        android:layout_height="16dp" />
+        android:layout_height="8dp" />
 </LinearLayout>
