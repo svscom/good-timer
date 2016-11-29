@@ -39,7 +39,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(MainActivity.logTag, "FragmentSetTimers onCreateView");
-        header = inflater.inflate(R.layout.header_lv_actual_timers, null, false);
+        header = inflater.inflate(R.layout.header_lv_actual_timers, listViewOfActualTimers, false);
         return inflater.inflate(R.layout.fragment_set_timers, container, false);
     }
 
