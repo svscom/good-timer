@@ -3,6 +3,7 @@ package com.svs.goodtimer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,11 +32,13 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        Log.d(MainActivity.logTag, "FragmentSetTimers onCreate");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(MainActivity.logTag, "FragmentSetTimers onCreateView");
         header = inflater.inflate(R.layout.header_lv_actual_timers, null, false);
         return inflater.inflate(R.layout.fragment_set_timers, container, false);
     }
@@ -43,7 +46,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
     @Override
     public void onStart() {
         super.onStart();
-
+        Log.d(MainActivity.logTag, "FragmentSetTimers onStart");
     }
 
     @Override
@@ -74,6 +77,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
         btnStartTimer = (Button) header.findViewById(R.id.buttonStartTimer);
 
         listViewOfActualTimers.setAdapter(adapterForListOfActualTimers);
+        Log.d(MainActivity.logTag, "FragmentSetTimers onActivityCreated");
     }
 
     @Override
@@ -87,6 +91,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
         }
 
         v.onTouchEvent(event);
+        Log.d(MainActivity.logTag, "FragmentSetTimers onTouch");
         return true;
     }
 
@@ -97,6 +102,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
         outState.putInt("numberPickerSeconds", numberPickerSeconds.getValue());
         outState.putString("etDescription", String.valueOf(etDescription.getText()));
         outState.putBoolean("switchAddInActualList", switchAddInActualList.isChecked());
+        Log.d(MainActivity.logTag, "FragmentSetTimers onSaveInstanceState");
         super.onSaveInstanceState(outState);
     }
 
@@ -108,5 +114,6 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
         numberPickerSeconds.setValue(savedInstanceState != null ? savedInstanceState.getInt("numberPickerSeconds") : 0);
         etDescription.setText(savedInstanceState != null ? savedInstanceState.getString("etDescription") : null);
         switchAddInActualList.setChecked(savedInstanceState != null && savedInstanceState.getBoolean("switchAddInActualList"));
+        Log.d(MainActivity.logTag, "FragmentSetTimers onViewStateRestored");
     }
 }

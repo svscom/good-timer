@@ -15,7 +15,7 @@ class ItemListOfActualTimers {
     private static String formatSeconds = "%d сек";
     private static Locale locale = Locale.getDefault();
 
-    public ItemListOfActualTimers(int hours, int minutes, int seconds, String description) {
+    ItemListOfActualTimers(int hours, int minutes, int seconds, String description) {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
@@ -26,7 +26,7 @@ class ItemListOfActualTimers {
                 (seconds > 0 ? String.format(locale, formatSeconds, seconds) : "");
     }
 
-    public ItemListOfActualTimers(int hours, int minutes, int seconds) {
+    ItemListOfActualTimers(int hours, int minutes, int seconds) {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
@@ -40,11 +40,11 @@ class ItemListOfActualTimers {
         return timeInMillis;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public String getTimeInString() {
+    String getTimeInString() {
         return timeInString;
     }
 }

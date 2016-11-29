@@ -18,7 +18,7 @@ class AdapterForListOfActualTimers extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private ArrayList<ItemListOfActualTimers> itemsListOfActualTimers;
 
-    public AdapterForListOfActualTimers(Context context, ArrayList<ItemListOfActualTimers> objects) {
+    AdapterForListOfActualTimers(Context context, ArrayList<ItemListOfActualTimers> objects) {
         this.context = context;
         this.itemsListOfActualTimers = objects;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
