@@ -50,7 +50,8 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(), ((MainActivity) getActivity()).getListOfActualTimers()); // добавить метод в активити
+        adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(),
+                ((MainActivity) getActivity()).fillDataToListOfActualTimers()); // добавить метод в активити
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
         listViewOfActualTimers.addHeaderView(header, null, false);
