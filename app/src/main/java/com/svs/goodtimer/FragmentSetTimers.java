@@ -18,7 +18,7 @@ import android.widget.Switch;
  * Created by Виталий on 26.11.2016.
  */
 
-public class FragmentSetTimers extends Fragment implements View.OnTouchListener {
+public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener {
     ListView listViewOfActualTimers;
     View header;
     NumberPicker numberPickerHours, numberPickerMinutes, numberPickerSeconds;
@@ -81,8 +81,8 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {  //пока здесь только фича, которая вроде как помогает правильно взаимодействовать
-        // с numberPicker'ами, когда они расположены внутри Scroll элемента(не уверен насчёт ListView, нужно проверить!)
+    public boolean onTouch(View v, MotionEvent event) {
+        //фича, которая помогает правильно взаимодействовать с numberPicker'ами, когда они расположены внутри Scroll элемента
         if (event.getAction() == MotionEvent.ACTION_MOVE && v.getParent() != null) {
             v.getParent().requestDisallowInterceptTouchEvent(true);
         }
@@ -91,8 +91,16 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener 
         }
 
         v.onTouchEvent(event);
+
+        if (v.getId() != etDescription.getId() && (etDescription.hasFocus() || etDescription.hasFocusable())) etDescription.clearFocus();
+
         Log.d(MainActivity.logTag, "FragmentSetTimers onTouch");
         return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+
     }
 
     @Override

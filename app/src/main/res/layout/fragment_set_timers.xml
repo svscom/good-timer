@@ -8,6 +8,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lvActualTimers" />
+        android:id="@+id/lvActualTimers"
+        android:divider="@drawable/divider_for_headers"
+        android:dividerHeight="4dp" />
 
 </LinearLayout>
