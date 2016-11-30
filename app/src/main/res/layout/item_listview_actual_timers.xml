@@ -36,7 +36,9 @@
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@drawable/divider_horizontal_item_list_actual_timers"
-            android:id="@+id/viewListActualTimersHorizontalDivider" />
+            android:id="@+id/viewListActualTimersHorizontalDivider"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp" />
 
         <TextView
             android:text="@string/textViewListActualTimersTimerValueDefaultText"
