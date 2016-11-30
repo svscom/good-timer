@@ -1,5 +1,7 @@
 package com.svs.goodtimer;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,11 +16,14 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 
+import java.util.ArrayList;
+
 /**
  * Created by Виталий on 26.11.2016.
  */
 
-public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener {
+public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener,
+        View.OnClickListener {
     ListView listViewOfActualTimers;
     View header;
     NumberPicker numberPickerHours, numberPickerMinutes, numberPickerSeconds;
@@ -27,11 +32,15 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     Button btnStartTimer;
 
     AdapterForListOfActualTimers adapterForListOfActualTimers;
+    private ArrayList<ItemListOfActualTimers> listOfActualTimers;
+
+    private static SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        loadListOfActualTimers();
         Log.d(MainActivity.logTag, "FragmentSetTimers onCreate");
     }
 
@@ -53,8 +62,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(),
-                ((MainActivity) getActivity()).fillDataToListOfActualTimers()); // добавить метод в активити
+        adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(), listOfActualTimers); // добавить метод в активити
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
         listViewOfActualTimers.addHeaderView(header, null, false);
@@ -75,6 +83,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         etDescription = (EditText) header.findViewById(R.id.editTextDescription);
         switchAddInActualList = (Switch) header.findViewById(R.id.switchAddInActualTimers);
         btnStartTimer = (Button) header.findViewById(R.id.buttonStartTimer);
+        btnStartTimer.setOnClickListener(this);
 
         listViewOfActualTimers.setAdapter(adapterForListOfActualTimers);
         Log.d(MainActivity.logTag, "FragmentSetTimers onActivityCreated");
@@ -123,5 +132,52 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         etDescription.setText(savedInstanceState != null ? savedInstanceState.getString("etDescription") : null);
         switchAddInActualList.setChecked(savedInstanceState != null && savedInstanceState.getBoolean("switchAddInActualList"));
         Log.d(MainActivity.logTag, "FragmentSetTimers onViewStateRestored");
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.buttonStartTimer) {}
+    }
+
+    void saveListOfActualTimers() {
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(getString(R.string.sizeListOfActualTimers), listOfActualTimers.size());
+        StringBuilder stringBuilder;
+        for (int i = 0; i < listOfActualTimers.size(); i++) {
+            stringBuilder = new StringBuilder(getString(R.string.itemActualTimer));
+            stringBuilder.append(i);
+            editor.putString(stringBuilder.toString(), listOfActualTimers.get(i).toString());
+        }
+        editor.apply();
+    }
+
+    void loadListOfActualTimers() {
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(getString(R.string.firstRun), true)) {
+            listOfActualTimers = new ArrayList<>(6);
+            listOfActualTimers.add(new ItemListOfActualTimers(0, 10, 0));
+            listOfActualTimers.add(new ItemListOfActualTimers(0, 30, 0));
+            listOfActualTimers.add(new ItemListOfActualTimers(0, 10, 0, "Макарошки"));
+            listOfActualTimers.add(new ItemListOfActualTimers(0, 5, 0, "Чайник"));
+            listOfActualTimers.add(new ItemListOfActualTimers(1, 23, 0, "Хз что это"));
+            listOfActualTimers.add(new ItemListOfActualTimers(1, 23, 17, "Секунды"));
+            sharedPreferences.edit().putBoolean(getString(R.string.firstRun), false).apply();
+        } else {
+            int size = sharedPreferences.getInt(getString(R.string.sizeListOfActualTimers), 0);
+            listOfActualTimers = new ArrayList<>(size);
+            StringBuilder stringBuilder;
+            for (int i = 0; i < size; i++) {
+                stringBuilder = new StringBuilder(getString(R.string.itemActualTimer));
+                stringBuilder.append(i);
+                listOfActualTimers.add(ItemListOfActualTimers.getItemFromString(sharedPreferences.getString(stringBuilder.toString(), null)));
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        saveListOfActualTimers();
+        super.onDestroy();
     }
 }

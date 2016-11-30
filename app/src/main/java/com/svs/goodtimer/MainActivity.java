@@ -25,14 +25,4 @@ public class MainActivity extends AppCompatActivity {
         if (fragmentSetTimers == null)
             fragmentManager.beginTransaction().add(R.id.activity_main, new FragmentSetTimers(), "fragmentSetTimersTAG").commit();
     }
-
-    ArrayList<ItemListOfActualTimers> fillDataToListOfActualTimers() {
-        ArrayList<ItemListOfActualTimers> list = new ArrayList<>();
-        list.add(new ItemListOfActualTimers(0, 10, 0));
-        list.add(new ItemListOfActualTimers(0, 30, 0));
-        list.add(new ItemListOfActualTimers(0, 10, 0, "Макароны"));
-        list.add(new ItemListOfActualTimers(0, 5, 0, "Чайник"));
-        list.add(new ItemListOfActualTimers(1, 23, 0, "Хз что это"));
-        return list;
-    }
 }

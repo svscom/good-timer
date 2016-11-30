@@ -11,4 +11,7 @@
     <string name="textViewHeaderOfListActualTimersText">Актуальные</string>
     <string name="imageViewItemListActualTimersContentDescription">Изображение таймера для элемента списка</string>
     <string name="textViewListActualTimersTimerValueDefaultText">Значение</string>
+    <string name="sizeListOfActualTimers">Размер списка актуальных таймеров</string>
+    <string name="itemActualTimer">ActualTimer</string>
+    <string name="firstRun">FirstRun</string>
 </resources>
