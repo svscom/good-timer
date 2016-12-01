@@ -205,8 +205,8 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
             public int compare(ItemListOfActualTimers lhs, ItemListOfActualTimers rhs) {
                 if (((lhs.getDescription() != null && !lhs.getDescription().equals("")) &&
                         (rhs.getDescription() != null && !rhs.getDescription().equals(""))) ||
-                ((lhs.getDescription() == null && lhs.getDescription().equals("")) &&
-                        (rhs.getDescription() == null && rhs.getDescription().equals("")))) { //у обоих или есть или нет описания сравниваем по времени
+                ((lhs.getDescription() == null || lhs.getDescription().equals("")) &&
+                        (rhs.getDescription() == null || rhs.getDescription().equals("")))) { //у обоих или есть или нет описания сравниваем по времени
                     return (lhs.getTimeInMillis() - rhs.getTimeInMillis() > 0 ? 1 : -1);
                 }
                 if (((lhs.getDescription() != null && !lhs.getDescription().equals("")) &&
