@@ -1,7 +1,6 @@
 package com.svs.goodtimer;
 
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Created by Виталий on 28.11.2016.
@@ -39,7 +38,7 @@ class ItemListOfActualTimers {
                 (seconds > 0 ? String.format(locale, formatSeconds, seconds) : "");
     }
 
-    public long getTimeInMillis() {
+    long getTimeInMillis() {
         return timeInMillis;
     }
 

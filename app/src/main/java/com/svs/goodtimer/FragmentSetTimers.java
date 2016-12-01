@@ -41,9 +41,10 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(MainActivity.logTag, "FragmentSetTimers onCreate");
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        loadListOfActualTimers();
+        Log.d(MainActivity.logTag, "FragmentSetTimers onCreate");
     }
 
     @Nullable
@@ -64,7 +65,6 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        loadListOfActualTimers();
         adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(), listOfActualTimers); // добавить метод в активити
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
@@ -178,11 +178,11 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
             for (int i = 0; i < size; i++) {
                 stringBuilder = new StringBuilder(getString(R.string.itemActualTimer));
                 stringBuilder.append(i);
-                Log.d(MainActivity.logTag, "FragmentSetTimers loadListOfActualTimers");
                 listOfActualTimers.add(ItemListOfActualTimers.getItemFromString(sharedPreferences.getString(stringBuilder.toString(), null)));
             }
         }
         sortListOfActualTimers();
+        Log.d(MainActivity.logTag, "FragmentSetTimers loadListOfActualTimers");
     }
 
     void addItemInListOfActualTimers() {
