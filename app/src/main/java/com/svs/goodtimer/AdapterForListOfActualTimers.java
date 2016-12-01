@@ -51,7 +51,7 @@ class AdapterForListOfActualTimers extends BaseAdapter {
         }
 
         // заполняем View в пункте списка данными
-        if (item.getDescription() != null) {
+        if (item.getDescription() != null && !item.getDescription().equals("")) {
             view.findViewById(R.id.textViewListActualTimersTimerDescription).setVisibility(View.VISIBLE);
             view.findViewById(R.id.viewListActualTimersHorizontalDivider).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.textViewListActualTimersTimerDescription)).setText(item.getDescription());

@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Виталий on 26.11.2016.
@@ -38,10 +41,9 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        loadListOfActualTimers();
         Log.d(MainActivity.logTag, "FragmentSetTimers onCreate");
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -62,6 +64,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        loadListOfActualTimers();
         adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(), listOfActualTimers); // добавить метод в активити
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
@@ -136,7 +139,11 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.buttonStartTimer) {}
+        if (v.getId() == R.id.buttonStartTimer) {
+            if (switchAddInActualList.isChecked()) {
+                addItemInListOfActualTimers();
+            }
+        }
     }
 
     void saveListOfActualTimers() {
@@ -150,6 +157,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
             editor.putString(stringBuilder.toString(), listOfActualTimers.get(i).toString());
         }
         editor.apply();
+        Log.d(MainActivity.logTag, "FragmentSetTimers saveListOfActualTimers");
     }
 
     void loadListOfActualTimers() {
@@ -170,14 +178,54 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
             for (int i = 0; i < size; i++) {
                 stringBuilder = new StringBuilder(getString(R.string.itemActualTimer));
                 stringBuilder.append(i);
+                Log.d(MainActivity.logTag, "FragmentSetTimers loadListOfActualTimers");
                 listOfActualTimers.add(ItemListOfActualTimers.getItemFromString(sharedPreferences.getString(stringBuilder.toString(), null)));
             }
         }
+        sortListOfActualTimers();
+    }
+
+    void addItemInListOfActualTimers() {
+        ItemListOfActualTimers newItem = new ItemListOfActualTimers(numberPickerHours.getValue(),
+                numberPickerMinutes.getValue(), numberPickerSeconds.getValue(), etDescription.getText().toString());
+        if (!listOfActualTimers.contains(newItem)) {
+            listOfActualTimers.add(newItem);
+
+            sortListOfActualTimers();
+            adapterForListOfActualTimers.notifyDataSetChanged();
+        } else {
+            Toast.makeText(getContext(), "Такой таймер уже есть в списке", Toast.LENGTH_SHORT).show();
+        }
+        Log.d(MainActivity.logTag, "FragmentSetTimers addItemInListOfActualTimers");
+    }
+
+    void sortListOfActualTimers() {
+        Collections.sort(listOfActualTimers, new Comparator<ItemListOfActualTimers>() {
+            @Override
+            public int compare(ItemListOfActualTimers lhs, ItemListOfActualTimers rhs) {
+                if (((lhs.getDescription() != null && !lhs.getDescription().equals("")) &&
+                        (rhs.getDescription() != null && !rhs.getDescription().equals(""))) ||
+                ((lhs.getDescription() == null && lhs.getDescription().equals("")) &&
+                        (rhs.getDescription() == null && rhs.getDescription().equals("")))) { //у обоих или есть или нет описания сравниваем по времени
+                    return (lhs.getTimeInMillis() - rhs.getTimeInMillis() > 0 ? 1 : -1);
+                }
+                if (((lhs.getDescription() != null && !lhs.getDescription().equals("")) &&
+                        (rhs.getDescription() == null || rhs.getDescription().equals("")))) { //у левого есть, у правого нет
+                    return -1;
+                }
+                if (((lhs.getDescription() == null || lhs.getDescription().equals("")) &&
+                        (rhs.getDescription() != null && !rhs.getDescription().equals("")))) { //у правого есть, у левого нет
+                    return 1;
+                }
+                return 0;
+            }
+        });
     }
 
     @Override
     public void onDestroy() {
         saveListOfActualTimers();
+        Log.d(MainActivity.logTag, "FragmentSetTimers onDestroy");
         super.onDestroy();
     }
 }

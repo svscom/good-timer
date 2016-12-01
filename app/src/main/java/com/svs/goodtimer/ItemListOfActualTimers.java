@@ -1,6 +1,7 @@
 package com.svs.goodtimer;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Виталий on 28.11.2016.
@@ -31,6 +32,7 @@ class ItemListOfActualTimers {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
+        this.description = "";
         this.timeInMillis = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
         this.timeInString = (hours > 0 ? String.format(locale, formatHours, hours) : "") +
                 (minutes > 0 ? String.format(locale, formatMinutes, minutes) : "") +
@@ -51,9 +53,8 @@ class ItemListOfActualTimers {
 
     @Override
     public String toString() {
-        return hours + divider + minutes + divider + seconds + divider + description;
+        return String.valueOf(hours) + divider + minutes + divider + seconds + (description == null || description.equals("") ? "" : divider + description);
     }
-
 
     static ItemListOfActualTimers getItemFromString(String s) {
         if (s == null) return null;
@@ -62,5 +63,28 @@ class ItemListOfActualTimers {
         if (data.length == 3) item = new ItemListOfActualTimers(Integer.parseInt(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
         else item = new ItemListOfActualTimers(Integer.parseInt(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2]), data[3]);
         return item;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ItemListOfActualTimers that = (ItemListOfActualTimers) o;
+
+        if (hours != that.hours) return false;
+        if (minutes != that.minutes) return false;
+        if (seconds != that.seconds) return false;
+        return description != null ? description.equals(that.description) : that.description == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hours;
+        result = 31 * result + minutes;
+        result = 31 * result + seconds;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
     }
 }
