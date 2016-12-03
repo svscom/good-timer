@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,7 +30,7 @@ import java.util.Comparator;
  */
 
 public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener,
-        View.OnClickListener {
+        View.OnClickListener, TextView.OnEditorActionListener {
     ListView listViewOfActualTimers;
     View header;
     NumberPicker numberPickerHours, numberPickerMinutes, numberPickerSeconds;
@@ -84,6 +88,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         numberPickerSeconds.setOnTouchListener(this);
 
         etDescription = (EditText) header.findViewById(R.id.editTextDescription);
+        etDescription.setOnEditorActionListener(this);
         switchAddInActualList = (Switch) header.findViewById(R.id.switchAddInActualTimers);
         btnStartTimer = (Button) header.findViewById(R.id.buttonStartTimer);
         btnStartTimer.setOnClickListener(this);
@@ -104,15 +109,33 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
         v.onTouchEvent(event);
 
-        if (v.getId() != etDescription.getId() && (etDescription.hasFocus() || etDescription.hasFocusable())) etDescription.clearFocus();
-
         Log.d(MainActivity.logTag, "FragmentSetTimers onTouch");
         return true;
     }
 
     @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.buttonStartTimer) {
+            if (switchAddInActualList.isChecked()) {
+                addItemInListOfActualTimers();
+            }
+        }
+    }
+
+    @Override
     public void onFocusChange(View v, boolean hasFocus) {
 
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            v.clearFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -135,15 +158,6 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         etDescription.setText(savedInstanceState != null ? savedInstanceState.getString("etDescription") : null);
         switchAddInActualList.setChecked(savedInstanceState != null && savedInstanceState.getBoolean("switchAddInActualList"));
         Log.d(MainActivity.logTag, "FragmentSetTimers onViewStateRestored");
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.buttonStartTimer) {
-            if (switchAddInActualList.isChecked()) {
-                addItemInListOfActualTimers();
-            }
-        }
     }
 
     void saveListOfActualTimers() {
@@ -187,7 +201,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
     void addItemInListOfActualTimers() {
         ItemListOfActualTimers newItem = new ItemListOfActualTimers(numberPickerHours.getValue(),
-                numberPickerMinutes.getValue(), numberPickerSeconds.getValue(), etDescription.getText().toString());
+                numberPickerMinutes.getValue(), numberPickerSeconds.getValue(), etDescription.getText().toString().trim());
         if (!listOfActualTimers.contains(newItem)) {
             listOfActualTimers.add(newItem);
 
