@@ -72,7 +72,8 @@
         android:id="@+id/editTextDescription"
         android:hint="@string/editTextDescriptionText"
         android:maxLength="80"
-        android:imeOptions="actionDone|flagNoFullscreen" />
+        android:imeOptions="actionDone|flagNoFullscreen"
+        style="?android:attr/editTextStyle" />
 
     <Switch
         android:text="@string/switchAddInActualTimersText"
@@ -104,13 +105,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textViewHeaderOfListActualTimers"
-        android:gravity="center"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="18sp"
-        android:paddingTop="10dp" />
+        android:gravity="center_vertical"
+        android:textAlignment="gravity"
+        android:paddingLeft="30dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="2dp" />
 
     <View
         android:layout_width="wrap_content"
-        android:background="@drawable/divider_for_headers"
-        android:layout_height="8dp" />
+        android:background="@android:color/holo_blue_dark"
+        android:layout_height="3dp" />
 </LinearLayout>
