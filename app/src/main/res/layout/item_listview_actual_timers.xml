@@ -14,9 +14,9 @@
         android:src="@mipmap/ic_launcher" />
 
     <View
-        android:layout_width="3dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/divider_vertical_item_list_actual_timers" />
+        android:background="@color/divider"
+        android:layout_width="2dp"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:orientation="vertical"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/rootElementHeaderListViewActualTimers">
 
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/buttonStartTimer"
         android:textSize="18sp"
-        style="?attr/buttonStyle" />
+        style="@android:style/Widget.Button.Small" />
 
     <View
         android:layout_width="wrap_content"
@@ -115,6 +115,6 @@
 
     <View
         android:layout_width="wrap_content"
-        android:background="@android:color/holo_blue_dark"
+        android:background="@color/divider"
         android:layout_height="3dp" />
 </LinearLayout>

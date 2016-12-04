@@ -202,13 +202,15 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     void addItemInListOfActualTimers() {
         ItemListOfActualTimers newItem = new ItemListOfActualTimers(numberPickerHours.getValue(),
                 numberPickerMinutes.getValue(), numberPickerSeconds.getValue(), etDescription.getText().toString().trim());
-        if (!listOfActualTimers.contains(newItem)) {
+        if (listOfActualTimers.contains(newItem)) {
+            Toast.makeText(getContext(), "Такой таймер уже есть в списке", Toast.LENGTH_LONG).show();
+        } else if (newItem.getTimeInMillis() == 0) {
+            Toast.makeText(getContext(), "Установленное время действия таймера равно нулю.\nПожалуйста, установите не нулевое значение.", Toast.LENGTH_LONG).show();
+        } else {
             listOfActualTimers.add(newItem);
 
             sortListOfActualTimers();
             adapterForListOfActualTimers.notifyDataSetChanged();
-        } else {
-            Toast.makeText(getContext(), "Такой таймер уже есть в списке", Toast.LENGTH_SHORT).show();
         }
         Log.d(MainActivity.logTag, "FragmentSetTimers addItemInListOfActualTimers");
     }
