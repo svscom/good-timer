@@ -89,11 +89,8 @@
 
     <Button
         android:text="@string/buttonStartTimerText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/buttonStartTimer"
-        android:textSize="18sp"
-        style="@android:style/Widget.Button.Small" />
+        style="@style/AppTheme.Button" />
 
     <View
         android:layout_width="wrap_content"
@@ -105,8 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textViewHeaderOfListActualTimers"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="18sp"
+        android:textColor="@color/primary_text"
+        android:textSize="20sp"
         android:gravity="center_vertical"
         android:textAlignment="gravity"
         android:paddingLeft="30dp"
