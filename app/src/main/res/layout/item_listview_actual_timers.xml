@@ -11,12 +11,14 @@
         android:id="@+id/imageView"
         android:contentDescription="@string/imageViewItemListActualTimersContentDescription"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_timer_blue" />
 
     <View
         android:background="@color/divider"
-        android:layout_width="2dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_width="1dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp" />
 
     <LinearLayout
         android:orientation="vertical"
