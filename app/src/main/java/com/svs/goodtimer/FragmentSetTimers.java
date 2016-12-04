@@ -6,13 +6,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,7 +37,7 @@ import java.util.Comparator;
  */
 
 public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener,
-        View.OnClickListener, TextView.OnEditorActionListener {
+        View.OnClickListener, TextView.OnEditorActionListener, ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener {
     ListView listViewOfActualTimers;
     View header;
     NumberPicker numberPickerHours, numberPickerMinutes, numberPickerSeconds;
@@ -73,6 +80,9 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
         listViewOfActualTimers.addHeaderView(header, null, false);
+        registerForContextMenu(listViewOfActualTimers); // регистрируем для контекстного меню
+        listViewOfActualTimers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listViewOfActualTimers.setMultiChoiceModeListener(this);
 
         numberPickerHours = (NumberPicker) header.findViewById(R.id.numberPickerHours);
         numberPickerMinutes = (NumberPicker) header.findViewById(R.id.numberPickerMinutes);
@@ -94,6 +104,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         btnStartTimer.setOnClickListener(this);
 
         listViewOfActualTimers.setAdapter(adapterForListOfActualTimers);
+        listViewOfActualTimers.setOnItemClickListener(this);
         Log.d(MainActivity.logTag, "FragmentSetTimers onActivityCreated");
     }
 
@@ -136,6 +147,47 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu_actual_timers, menu);
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(MainActivity.logTag, "Бля" + String.valueOf(position) + id);
+        getActivity().openContextMenu(view);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Log.d(MainActivity.logTag, "Бля" + String.valueOf(info.position) + " " + info.id);
+        switch (item.getItemId())
+        {
+            case R.id.context_menu_actual_timers_start_timer_ID:
+                Toast.makeText(getContext(), "Таймер запущен", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.context_menu_actual_timers_select_ID:
+                listViewOfActualTimers.setItemChecked(info.position, true);
+                Toast.makeText(getContext(), "Выбрать", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.context_menu_actual_timers_edit_ID:
+                Toast.makeText(getContext(), "Редактировать", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.context_menu_actual_timers_delete_ID:
+                ItemListOfActualTimers itemForRemove = (ItemListOfActualTimers) listViewOfActualTimers.getAdapter().getItem(info.position);
+                if (listOfActualTimers.contains(itemForRemove)) listOfActualTimers.remove(itemForRemove);
+                sortListOfActualTimers();
+                adapterForListOfActualTimers.notifyDataSetChanged();
+                Toast.makeText(getContext(), "Таймер удалён из списка", Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -205,7 +257,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         if (listOfActualTimers.contains(newItem)) {
             Toast.makeText(getContext(), "Такой таймер уже есть в списке", Toast.LENGTH_LONG).show();
         } else if (newItem.getTimeInMillis() == 0) {
-            Toast.makeText(getContext(), "Установленное время действия таймера равно нулю.\nПожалуйста, установите не нулевое значение.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "\tУстановленное время действия таймера равно нулю.\n\tПожалуйста, установите не нулевое значение.", Toast.LENGTH_LONG).show();
         } else {
             listOfActualTimers.add(newItem);
 
@@ -243,5 +295,30 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         saveListOfActualTimers();
         Log.d(MainActivity.logTag, "FragmentSetTimers onDestroy");
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+
     }
 }

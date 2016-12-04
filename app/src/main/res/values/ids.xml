@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="context_menu_actual_timers_start_timer_ID" type="id">1</item>
+    <item name="context_menu_actual_timers_select_ID" type="id">2</item>
+    <item name="context_menu_actual_timers_edit_ID" type="id">3</item>
+    <item name="context_menu_actual_timers_delete_ID" type="id">4</item>
+</resources>
