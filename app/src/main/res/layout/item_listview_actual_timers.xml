@@ -23,7 +23,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <TextView
             android:text="@string/editTextDescriptionText"
@@ -45,7 +46,7 @@
         <TextView
             android:text="@string/textViewListActualTimersTimerValueDefaultText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/textViewListActualTimersTimerValue"
             android:gravity="center"
             android:textColor="?android:attr/textColorPrimary"
