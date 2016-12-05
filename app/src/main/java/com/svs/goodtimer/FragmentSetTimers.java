@@ -127,10 +127,20 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.buttonStartTimer) {
+            startNewTimer();
             if (switchAddInActualList.isChecked()) {
-                addItemInListOfActualTimers();
+                addItemInListOfActualTimers(); //добавляем таймер в лист
             }
         }
+    }
+
+    private void startNewTimer() {
+        //обнуляем значения numberPicker'ов, EditText'а и switch'a
+        numberPickerHours.setValue(numberPickerHours.getMinValue());
+        numberPickerMinutes.setValue(numberPickerMinutes.getMinValue());
+        numberPickerSeconds.setValue(numberPickerSeconds.getMinValue());
+        etDescription.setText("");
+        switchAddInActualList.setChecked(false);
     }
 
     @Override
