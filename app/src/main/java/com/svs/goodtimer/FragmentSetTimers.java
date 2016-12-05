@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -104,6 +106,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
         listViewOfActualTimers.setAdapter(adapterForListOfActualTimers);
         listViewOfActualTimers.setOnItemClickListener(this);
+
         Log.d(MainActivity.logTag, "FragmentSetTimers onActivityCreated");
     }
 
