@@ -14,4 +14,8 @@
     <string name="sizeListOfActualTimers">Размер списка актуальных таймеров</string>
     <string name="itemActualTimer">ActualTimer</string>
     <string name="firstRun">FirstRun</string>
+    <string name="item_context_menu_actual_timers_start">Запустить</string>
+    <string name="item_context_menu_actual_timers_select">Выбрать</string>
+    <string name="item_context_menu_actual_timers_edit">Редактировать</string>
+    <string name="item_context_menu_actual_timers_delete">Удалить</string>
 </resources>

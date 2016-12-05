@@ -162,9 +162,19 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+        View header = View.inflate(getContext(), R.layout.item_listview_actual_timers, null);
+        menu.setHeaderView(header);
+
+        ItemListOfActualTimers itemForHeader = (ItemListOfActualTimers) listViewOfActualTimers.getAdapter().getItem((acmi.position));
+
+        ((TextView) header.findViewById(R.id.textViewListActualTimersTimerDescription)).setText(itemForHeader.getDescription());
+        ((TextView) header.findViewById(R.id.textViewListActualTimersTimerValue)).setText(itemForHeader.getTimeInString());
+
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu_actual_timers, menu);
-
     }
 
     @Override
