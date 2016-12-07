@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
+            Log.d(MainActivity.logTag, "dispatchTouchEvent, action_down; currentFocus = " + v + (v != null ? v.getId() : 0));
             if (v instanceof EditText) {
+                Log.d(MainActivity.logTag, "dispatchTouchEvent, instanceof EditText");
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
                 Rect rectangle = new Rect();

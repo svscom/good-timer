@@ -159,20 +159,23 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.buttonStartTimer) {
-            startNewTimer();
+            Log.d(MainActivity.logTag, "Button startTimer onClick");
             if (switchAddInActualList.isChecked()) {
                 addItemInListOfActualTimers(); //добавляем таймер в лист
+                Log.d(MainActivity.logTag, "Button startTimer addInListOfActualTimers");
             }
+            startNewTimer();
         }
     }
 
     private void startNewTimer() {
         //обнуляем значения numberPicker'ов, EditText'а и switch'a
-        numberPickerHours.setValue(numberPickerHours.getMinValue());
-        numberPickerMinutes.setValue(numberPickerMinutes.getMinValue());
-        numberPickerSeconds.setValue(numberPickerSeconds.getMinValue());
-        etDescription.setText("");
-        switchAddInActualList.setChecked(false);
+        if (numberPickerHours.getValue() != numberPickerHours.getMinValue()) numberPickerHours.setValue(numberPickerHours.getMinValue());
+        if (numberPickerMinutes.getValue() != numberPickerMinutes.getMinValue()) numberPickerMinutes.setValue(numberPickerMinutes.getMinValue());
+        if (numberPickerSeconds.getValue() != numberPickerSeconds.getMinValue()) numberPickerSeconds.setValue(numberPickerSeconds.getMinValue());
+        if (etDescription.getText().length() != 0) etDescription.getText().clear();
+        if (switchAddInActualList.isChecked()) switchAddInActualList.setChecked(false);
+        Log.d(MainActivity.logTag, "startNewTimer");
     }
 
     @Override
