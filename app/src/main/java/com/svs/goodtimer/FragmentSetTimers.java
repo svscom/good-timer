@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -29,15 +30,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * Created by Виталий on 26.11.2016.
  */
 
 public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener,
-        View.OnClickListener, TextView.OnEditorActionListener, ListView.OnItemClickListener {
+        View.OnClickListener, TextView.OnEditorActionListener, ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener {
     ListView listViewOfActualTimers;
     View header;
     NumberPicker numberPickerHours, numberPickerMinutes, numberPickerSeconds;
@@ -80,40 +83,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
         listViewOfActualTimers.addHeaderView(header, null, false);
-        listViewOfActualTimers.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                Log.d(MainActivity.logTag, "position = " + position + ", checked = "
-                        + checked);
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.action_mode_menu_actual_timers, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.item1:
-                        mode.finish(); // Action picked, so close the CAB
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-
-            }
-        });
+        listViewOfActualTimers.setMultiChoiceModeListener(this);
 
         numberPickerHours = (NumberPicker) header.findViewById(R.id.numberPickerHours);
         numberPickerMinutes = (NumberPicker) header.findViewById(R.id.numberPickerMinutes);
@@ -362,5 +332,73 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         saveListOfActualTimers();
         Log.d(MainActivity.logTag, "FragmentSetTimers onDestroy");
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+        Log.d(MainActivity.logTag, "position = " + position + ", checked = "
+                + checked);
+        final int checkedCount = listViewOfActualTimers.getCheckedItemCount();
+        switch (checkedCount) {
+            case 0:
+                mode.setSubtitle(null);
+                break;
+            case 1:
+                mode.setSubtitle("Выделено: 1");
+                break;
+            default:
+                mode.setSubtitle("Выделено: " + checkedCount);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.setTitle("Всего: " + listViewOfActualTimers.getAdapter().getCount());
+        mode.getMenuInflater().inflate(R.menu.action_mode_menu_actual_timers, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+                for (int i = 0; i < listViewOfActualTimers.getAdapter().getCount(); i++) {
+                    if (!listViewOfActualTimers.isItemChecked(i)) listViewOfActualTimers.setItemChecked(i, true);
+                }
+                return true;
+            case R.id.item2:
+                Toast.makeText(getContext(), "Выбранные таймеры запущены", Toast.LENGTH_LONG).show();
+                mode.finish();
+                return true;
+            case R.id.item3:
+                SparseBooleanArray sbArray = listViewOfActualTimers.getCheckedItemPositions();
+                int count = listViewOfActualTimers.getCheckedItemCount();
+                ArrayList<Integer> checkedItemPositions = new ArrayList<>(count);
+                for (int i = 0; i < sbArray.size(); i++) {
+                    if (sbArray.get(sbArray.keyAt(i))) checkedItemPositions.add(sbArray.keyAt(i));
+                }
+                Collections.sort(checkedItemPositions);
+                Collections.reverse(checkedItemPositions);
+                for (int i = 0; i < checkedItemPositions.size(); i++) {
+                    listOfActualTimers.remove(checkedItemPositions.get(i) - 1);
+                }
+                adapterForListOfActualTimers.notifyDataSetChanged();
+                Toast.makeText(getContext(), "Таймеры удалёны из списка", Toast.LENGTH_LONG).show();
+                mode.finish();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+
     }
 }
