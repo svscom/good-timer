@@ -1,11 +1,9 @@
 package com.svs.goodtimer;
 
 import android.content.Context;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -43,7 +41,6 @@ class AdapterForListOfActualTimers extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         ItemListOfActualTimers item = (ItemListOfActualTimers) getItem(position);
 
         // используем созданные, но не используемые view
@@ -66,5 +63,10 @@ class AdapterForListOfActualTimers extends BaseAdapter {
         }
 
         return view;
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return true;
     }
 }

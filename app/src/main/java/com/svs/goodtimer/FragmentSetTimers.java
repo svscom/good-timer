@@ -30,10 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 
 /**
  * Created by Виталий on 26.11.2016.
@@ -82,7 +80,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         adapterForListOfActualTimers = new AdapterForListOfActualTimers(getContext(), listOfActualTimers); // добавить метод в активити
 
         listViewOfActualTimers = (ListView) getActivity().findViewById(R.id.lvActualTimers);
-        listViewOfActualTimers.addHeaderView(header, null, false);
+        listViewOfActualTimers.addHeaderView(header, null, true);
         listViewOfActualTimers.setMultiChoiceModeListener(this);
 
         numberPickerHours = (NumberPicker) header.findViewById(R.id.numberPickerHours);

@@ -108,10 +108,8 @@
         android:textAlignment="gravity"
         android:paddingLeft="30dp"
         android:paddingTop="5dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="5dp"
+        android:background="@color/c200"
+        android:textAllCaps="false" />
 
-    <View
-        android:layout_width="wrap_content"
-        android:background="@color/divider"
-        android:layout_height="3dp" />
 </LinearLayout>

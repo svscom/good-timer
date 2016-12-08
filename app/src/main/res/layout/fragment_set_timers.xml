@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lvActualTimers"
-        android:divider="@color/divider"
+        android:divider="@color/c400"
         android:dividerHeight="2dp"
         tools:listheader="@id/rootElementHeaderListViewActualTimers"
         tools:listitem="@layout/item_listview_actual_timers"
         android:scrollbars="none"
         android:choiceMode="multipleChoiceModal"
-        android:listSelector="@drawable/new_list_choice_indicator"/>
+        android:listSelector="@drawable/new_list_choice_indicator"
+        android:headerDividersEnabled="true" />
 
 </LinearLayout>
