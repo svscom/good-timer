@@ -352,7 +352,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        mode.setTitle("Всего: " + listViewOfActualTimers.getAdapter().getCount());
+        mode.setTitle("Всего: " + (listViewOfActualTimers.getAdapter().getCount() - 1));
         mode.getMenuInflater().inflate(R.menu.action_mode_menu_actual_timers, menu);
         return true;
     }
@@ -366,7 +366,7 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-                for (int i = 0; i < listViewOfActualTimers.getAdapter().getCount(); i++) {
+                for (int i = 1; i < listViewOfActualTimers.getAdapter().getCount(); i++) {
                     if (!listViewOfActualTimers.isItemChecked(i)) listViewOfActualTimers.setItemChecked(i, true);
                 }
                 return true;
