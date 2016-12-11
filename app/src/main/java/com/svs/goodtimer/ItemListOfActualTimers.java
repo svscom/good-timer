@@ -50,6 +50,34 @@ class ItemListOfActualTimers {
         return timeInString;
     }
 
+    int getHours() {
+        return hours;
+    }
+
+    int getMinutes() {
+        return minutes;
+    }
+
+    int getSeconds() {
+        return seconds;
+    }
+
+    void setHours(int hours) {
+        this.hours = hours;
+    }
+
+    void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    void setSeconds(int seconds) {
+        this.seconds = seconds;
+    }
+
+    void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return String.valueOf(hours) + divider + minutes + divider + seconds + (description == null || description.equals("") ? "" : divider + description);

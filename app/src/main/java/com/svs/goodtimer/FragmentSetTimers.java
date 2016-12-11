@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -212,17 +213,30 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
                 return true;
             case R.id.context_menu_actual_timers_edit_ID:
                 Toast.makeText(getContext(), "Редактировать", Toast.LENGTH_LONG).show();
+                ItemListOfActualTimers itemForEdit = (ItemListOfActualTimers) listViewOfActualTimers.getAdapter().getItem(info.position);
+                showEditOrAddDialog("Редактирование", itemForEdit, info.position);
                 return true;
             case R.id.context_menu_actual_timers_delete_ID:
                 ItemListOfActualTimers itemForRemove = (ItemListOfActualTimers) listViewOfActualTimers.getAdapter().getItem(info.position);
                 if (listOfActualTimers.contains(itemForRemove)) listOfActualTimers.remove(itemForRemove);
-                sortListOfActualTimers();
                 adapterForListOfActualTimers.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Таймер удалён из списка", Toast.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void showEditOrAddDialog(String action, ItemListOfActualTimers item, int position) {
+        DialogFragmentEditOrAddTimer editOrAddDialog = new DialogFragmentEditOrAddTimer();
+        Bundle args = new Bundle();
+        args.putString("Dialog action", action);
+        args.putInt("Item position", position);
+        if ("Редактирование".equals(action)) {
+            args.putString("ItemForEdit", item.toString());
+        }
+        editOrAddDialog.setArguments(args);
+        editOrAddDialog.show(getFragmentManager(), "editOrAddDialog");
     }
 
     @Override
@@ -300,6 +314,14 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
             adapterForListOfActualTimers.notifyDataSetChanged();
         }
         Log.d(MainActivity.logTag, "FragmentSetTimers addItemInListOfActualTimers");
+    }
+
+    void editItemInListOfActualTimers(ItemListOfActualTimers item, int position) {
+        if (!listOfActualTimers.contains(item)) {
+            listOfActualTimers.set(position - 1, item);
+            sortListOfActualTimers();
+            adapterForListOfActualTimers.notifyDataSetChanged();
+        } else Toast.makeText(getContext(), "Такой таймер уже есть в списке!", Toast.LENGTH_LONG).show();
     }
 
     void sortListOfActualTimers() {
