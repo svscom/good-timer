@@ -18,4 +18,5 @@
     <string name="item_context_menu_actual_timers_select">Выбрать</string>
     <string name="item_context_menu_actual_timers_edit">Редактировать</string>
     <string name="item_context_menu_actual_timers_delete">Удалить</string>
+    <string name="imageButtonAddTimerToListContentDescription">Кнопка - добавить таймер</string>
 </resources>

@@ -24,6 +24,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -38,14 +39,15 @@ import java.util.Comparator;
  * Created by Виталий on 26.11.2016.
  */
 
-public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnFocusChangeListener,
-        View.OnClickListener, TextView.OnEditorActionListener, ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener {
+public class FragmentSetTimers extends Fragment implements View.OnTouchListener, View.OnClickListener,
+        TextView.OnEditorActionListener, ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener {
     ListView listViewOfActualTimers;
     View header;
     NumberPicker numberPickerHours, numberPickerMinutes, numberPickerSeconds;
     EditText etDescription;
     Switch switchAddInActualList;
     Button btnStartTimer;
+    ImageButton addTimerToList;
 
     AdapterForListOfActualTimers adapterForListOfActualTimers;
     private ArrayList<ItemListOfActualTimers> listOfActualTimers;
@@ -103,6 +105,9 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         btnStartTimer = (Button) header.findViewById(R.id.buttonStartTimer);
         btnStartTimer.setOnClickListener(this);
 
+        addTimerToList = (ImageButton) header.findViewById(R.id.imageButtonAddTimerToList);
+        addTimerToList.setOnClickListener(this);
+
         listViewOfActualTimers.setAdapter(adapterForListOfActualTimers);
         listViewOfActualTimers.setOnItemClickListener(this);
 
@@ -127,13 +132,18 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.buttonStartTimer) {
-            Log.d(MainActivity.logTag, "Button startTimer onClick");
-            if (switchAddInActualList.isChecked()) {
-                addItemInListOfActualTimers(); //добавляем таймер в лист
-                Log.d(MainActivity.logTag, "Button startTimer addInListOfActualTimers");
-            }
-            startNewTimer();
+        switch (v.getId()) {
+            case R.id.buttonStartTimer:
+                Log.d(MainActivity.logTag, "Button startTimer onClick");
+                if (switchAddInActualList.isChecked()) {
+                    addItemInListOfActualTimers(null); //добавляем таймер в лист
+                    Log.d(MainActivity.logTag, "Button startTimer addInListOfActualTimers");
+                }
+                startNewTimer();
+                break;
+            case R.id.imageButtonAddTimerToList:
+                showEditOrAddDialog("Новый таймер", null, 0);
+                break;
         }
     }
 
@@ -145,11 +155,6 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         if (etDescription.getText().length() != 0) etDescription.getText().clear();
         if (switchAddInActualList.isChecked()) switchAddInActualList.setChecked(false);
         Log.d(MainActivity.logTag, "startNewTimer");
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-
     }
 
     @Override
@@ -231,8 +236,8 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         DialogFragmentEditOrAddTimer editOrAddDialog = new DialogFragmentEditOrAddTimer();
         Bundle args = new Bundle();
         args.putString("Dialog action", action);
-        args.putInt("Item position", position);
         if ("Редактирование".equals(action)) {
+            args.putInt("Item position", position);
             args.putString("ItemForEdit", item.toString());
         }
         editOrAddDialog.setArguments(args);
@@ -300,8 +305,8 @@ public class FragmentSetTimers extends Fragment implements View.OnTouchListener,
         Log.d(MainActivity.logTag, "FragmentSetTimers loadListOfActualTimers");
     }
 
-    void addItemInListOfActualTimers() {
-        ItemListOfActualTimers newItem = new ItemListOfActualTimers(numberPickerHours.getValue(),
+    void addItemInListOfActualTimers(ItemListOfActualTimers newItem) {
+        if (newItem == null) newItem = new ItemListOfActualTimers(numberPickerHours.getValue(),
                 numberPickerMinutes.getValue(), numberPickerSeconds.getValue(), etDescription.getText().toString().trim());
         if (listOfActualTimers.contains(newItem)) {
             Toast.makeText(getContext(), "Такой таймер уже есть в списке", Toast.LENGTH_LONG).show();

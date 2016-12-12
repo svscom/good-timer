@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -98,19 +99,41 @@
         android:layout_height="3dp"
         android:id="@+id/dividerSetTimerContextAndHeaderOfList" />
 
-    <TextView
-        android:text="@string/textViewHeaderOfListActualTimersText"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewHeaderOfListActualTimers"
-        android:textColor="@color/primary_text"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        android:textAlignment="gravity"
-        android:paddingLeft="30dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:background="@color/c200"
-        android:textAllCaps="false" />
+        android:background="@color/c200">
+
+        <TextView
+            android:text="@string/textViewHeaderOfListActualTimersText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/textViewHeaderOfListActualTimers"
+            android:textColor="@color/primary_text"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:textAlignment="gravity"
+            android:paddingLeft="30dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@color/c200"
+            android:textAllCaps="false"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonAddTimerToList"
+            android:src="@drawable/ic_add_timer_white_24dp"
+            android:layout_weight="1"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
+            android:paddingStart="35dp"
+            android:paddingEnd="35dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/imageButtonAddTimerToListContentDescription" />
+    </LinearLayout>
 
 </LinearLayout>
