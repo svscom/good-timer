@@ -3,7 +3,6 @@ package com.svs.goodtimer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
@@ -21,11 +20,9 @@ import android.widget.ScrollView;
  * Created by Виталий on 11.12.2016.
  */
 
-public class DialogFragmentEditOrAddTimer extends DialogFragment implements View.OnClickListener,
-        View.OnTouchListener {
+public class DialogFragmentEditOrAddTimer extends DialogFragment implements View.OnTouchListener {
     String dialogAction;
 
-    Button btnSaveOrAdd;
     NumberPicker npHours;
     NumberPicker npMinutes;
     NumberPicker npSeconds;
@@ -55,8 +52,7 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
         scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         dialogView = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.header_lv_actual_timers, null, false);
-        btnSaveOrAdd = (Button) dialogView.findViewById(R.id.buttonStartTimer);
-        btnSaveOrAdd.setOnClickListener(this);
+        dialogView.findViewById(R.id.buttonStartTimer).setVisibility(View.GONE);
         dialogView.findViewById(R.id.switchAddInActualTimers).setVisibility(View.GONE);
         dialogView.findViewById(R.id.textViewHeaderOfListActualTimers).setVisibility(View.GONE);
         dialogView.findViewById(R.id.dividerSetTimerContextAndHeaderOfList).setVisibility(View.GONE);
@@ -79,16 +75,35 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
         if ("Редактирование".equals(dialogAction)) {
             item = ItemListOfActualTimers.getItemFromString(args.getString("ItemForEdit"));
             itemPositionInList = args.getInt("Item position");
-            btnSaveOrAdd.setText("Сохранить");
             npHours.setValue(item.getHours());
             npMinutes.setValue(item.getMinutes());
             npSeconds.setValue(item.getSeconds());
             description.setText(item.getDescription());
             builder.setIcon(android.R.drawable.ic_menu_edit);
+            builder.setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    loadUserInputData();
+                    ((FragmentSetTimers) getFragmentManager().findFragmentByTag("fragmentSetTimersTAG")).
+                            editItemInListOfActualTimers(item, itemPositionInList);
+                }
+            });
         } else {
+            builder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    loadUserInputData();
+                    ((FragmentSetTimers) getFragmentManager().findFragmentByTag("fragmentSetTimersTAG")).
+                            addItemInListOfActualTimers(item);
+                }
+            });
             builder.setIcon(R.drawable.ic_add_timer_black_24dp);
-            btnSaveOrAdd.setText("Добавить");
         }
+        builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
         builder.setTitle(dialogAction);
         //добавляем dialogview в созданный программно scrollview
         scrollView.addView(dialogView);
@@ -98,36 +113,13 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.buttonStartTimer:
-                if ("Редактирование".equals(dialogAction)) editTimer();
-                else addNewTimer();
-                dismiss();
-                break;
-        }
-        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer onClick");
-    }
-
-    @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
     }
 
-    private void editTimer() {
-        item.setHours(npHours.getValue());
-        item.setMinutes(npMinutes.getValue());
-        item.setSeconds(npSeconds.getValue());
-        item.setDescription(description.getText().toString().trim());
-        item = ItemListOfActualTimers.getItemFromString(item.toString());
-        ((FragmentSetTimers) getFragmentManager().findFragmentByTag("fragmentSetTimersTAG")).editItemInListOfActualTimers(item, itemPositionInList);
-        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer editTimer");
-    }
-
-    private void addNewTimer() {
+    private void loadUserInputData() {
         item = new ItemListOfActualTimers(npHours.getValue(), npMinutes.getValue(), npSeconds.getValue(), description.getText().toString().trim());
-        ((FragmentSetTimers) getFragmentManager().findFragmentByTag("fragmentSetTimersTAG")).addItemInListOfActualTimers(item);
-        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer addNewTimer");
+        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer loadUserInputData");
     }
 
     @Override
