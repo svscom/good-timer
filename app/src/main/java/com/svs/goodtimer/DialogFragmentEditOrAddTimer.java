@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.Layout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
 
@@ -22,7 +21,8 @@ import android.widget.ScrollView;
  * Created by Виталий on 11.12.2016.
  */
 
-public class DialogFragmentEditOrAddTimer extends DialogFragment implements View.OnClickListener {
+public class DialogFragmentEditOrAddTimer extends DialogFragment implements View.OnClickListener,
+        View.OnTouchListener {
     String dialogAction;
 
     Button btnSaveOrAdd;
@@ -37,9 +37,12 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
     ViewGroup dialogView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            Log.d(MainActivity.logTag, "FragmentEditOrAddTimer onActivityCreated savedInstanceState not null");
+            onViewStateRestored(savedInstanceState);
+        }
     }
 
     @NonNull
@@ -47,6 +50,9 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
         dialogAction = args.getString("Dialog action");
+
+        ScrollView scrollView = new ScrollView(getContext());
+        scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         dialogView = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.header_lv_actual_timers, null, false);
         btnSaveOrAdd = (Button) dialogView.findViewById(R.id.buttonStartTimer);
@@ -58,12 +64,15 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
         npHours = (NumberPicker) dialogView.findViewById(R.id.numberPickerHours);
         npHours.setMinValue(0);
         npHours.setMaxValue(48);
+        npHours.setOnTouchListener(this);
         npMinutes = (NumberPicker) dialogView.findViewById(R.id.numberPickerMinutes);
         npMinutes.setMinValue(0);
         npMinutes.setMaxValue(59);
+        npMinutes.setOnTouchListener(this);
         npSeconds = (NumberPicker) dialogView.findViewById(R.id.numberPickerSeconds);
         npSeconds.setMinValue(0);
         npSeconds.setMaxValue(59);
+        npSeconds.setOnTouchListener(this);
         description = (EditText) dialogView.findViewById(R.id.editTextDescription);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -81,7 +90,10 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
             btnSaveOrAdd.setText("Добавить");
         }
         builder.setTitle(dialogAction);
-        builder.setView(dialogView);
+        //добавляем dialogview в созданный программно scrollview
+        scrollView.addView(dialogView);
+        builder.setView(scrollView);
+        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer onCreateDialog");
         return builder.create();
     }
 
@@ -94,6 +106,7 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
                 dismiss();
                 break;
         }
+        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer onClick");
     }
 
     @Override
@@ -108,11 +121,13 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
         item.setDescription(description.getText().toString().trim());
         item = ItemListOfActualTimers.getItemFromString(item.toString());
         ((FragmentSetTimers) getFragmentManager().findFragmentByTag("fragmentSetTimersTAG")).editItemInListOfActualTimers(item, itemPositionInList);
+        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer editTimer");
     }
 
     private void addNewTimer() {
         item = new ItemListOfActualTimers(npHours.getValue(), npMinutes.getValue(), npSeconds.getValue(), description.getText().toString().trim());
         ((FragmentSetTimers) getFragmentManager().findFragmentByTag("fragmentSetTimersTAG")).addItemInListOfActualTimers(item);
+        Log.d(MainActivity.logTag, "FragmentEditOrAddTimer addNewTimer");
     }
 
     @Override
@@ -127,7 +142,6 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
         npHours.setValue(savedInstanceState != null ? savedInstanceState.getInt("Hours") : 0);
         npMinutes.setValue(savedInstanceState != null ? savedInstanceState.getInt("Minutes") : 0);
         npSeconds.setValue(savedInstanceState != null ? savedInstanceState.getInt("Seconds") : 0);
@@ -136,14 +150,18 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        /*if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ScrollView scroll = new ScrollView(getContext());
-            scroll.addView(dialogView);
-            getDialog().setContentView(scroll);
+    public boolean onTouch(View v, MotionEvent event) {
+        //фича, которая помогает правильно взаимодействовать с numberPicker'ами, когда они расположены внутри Scroll элемента
+        if (event.getAction() == MotionEvent.ACTION_MOVE && v.getParent() != null) {
+            v.getParent().requestDisallowInterceptTouchEvent(true);
         }
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-        }*/
-        super.onConfigurationChanged(newConfig);
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            v.performClick();
+        }
+
+        v.onTouchEvent(event);
+
+        Log.d(MainActivity.logTag, "DialogFragmentEditOrAddTimer onTouch");
+        return true;
     }
 }
