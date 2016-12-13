@@ -3,5 +3,5 @@
 
     <item android:state_window_focused="false" android:drawable="@android:color/transparent" />
     <item android:state_pressed="true" android:drawable="@color/colorAccent" />
-    <item android:drawable="@color/c100" />
+    <item android:drawable="@color/c200" />
 </selector>
