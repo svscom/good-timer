@@ -2,25 +2,29 @@ package com.svs.goodtimer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 /**
  * Created by Виталий on 11.12.2016.
  */
 
-public class DialogFragmentEditOrAddTimer extends DialogFragment implements View.OnTouchListener {
+public class DialogFragmentEditOrAddTimer extends DialogFragment implements View.OnTouchListener, TextView.OnEditorActionListener {
     String dialogAction;
 
     NumberPicker npHours;
@@ -50,6 +54,9 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
 
         ScrollView scrollView = new ScrollView(getContext());
         scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        scrollView.setFocusable(true);
+        scrollView.setFocusableInTouchMode(true);
+        scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
         dialogView = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.header_lv_actual_timers, null, false);
         dialogView.findViewById(R.id.buttonStartTimer).setVisibility(View.GONE);
@@ -70,6 +77,7 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
         npSeconds.setMaxValue(59);
         npSeconds.setOnTouchListener(this);
         description = (EditText) dialogView.findViewById(R.id.editTextDescription);
+        description.setOnEditorActionListener(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if ("Редактирование".equals(dialogAction)) {
@@ -155,5 +163,16 @@ public class DialogFragmentEditOrAddTimer extends DialogFragment implements View
 
         Log.d(MainActivity.logTag, "DialogFragmentEditOrAddTimer onTouch");
         return true;
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            v.clearFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            return true;
+        }
+        return false;
     }
 }
